@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>内定への回答｜キャリアチケット</title>
+<style>
+  :root{
+    --bg:#F5F6F8;
+    --card:#FFFFFF;
+    --ink:#1C2024;
+    --sub:#6B7075;
+    --line:#E4E6E9;
+    --accept:#1F6F50;
+    --accept-hover:#175A40;
+    --decline-line:#C7CBCF;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+    display:flex;
+    justify-content:center;
+    padding:40px 16px;
+  }
+
+  .card{
+    width:100%;
+    max-width:480px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:32px 24px 28px;
+  }
+
+  .brand{
+    font-size:12px;
+    letter-spacing:.08em;
+    color:var(--sub);
+    margin-bottom:22px;
+  }
+
+  h1{
+    font-size:18px;
+    font-weight:700;
+    line-height:1.6;
+    margin:0 0 22px;
+  }
+
+  .details{
+    font-size:14px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    margin-bottom:26px;
+  }
+  .details dl{
+    display:grid;
+    grid-template-columns:104px 1fr;
+    margin:0;
+  }
+  .details dt,
+  .details dd{
+    padding:13px 2px;
+    margin:0;
+    border-top:1px solid var(--line);
+  }
+  .details dl > *:nth-child(-n+2){ border-top:none; }
+  .details dt{ color:var(--sub); }
+  .details dd{ font-weight:600; }
+
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  button.act{
+    appearance:none;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:.02em;
+    padding:15px 20px;
+    border-radius:8px;
+    transition: background .15s ease, transform .1s ease;
+  }
+  button.act:active{ transform:translateY(1px); }
+  button.act:focus-visible{
+    outline:3px solid #1F6F5055;
+    outline-offset:2px;
+  }
+  button.act:disabled{ opacity:.4; cursor:default; }
+
+  .btn-accept{
+    background:var(--accept);
+    color:#FFFFFF;
+  }
+  .btn-accept:hover:not(:disabled){ background:var(--accept-hover); }
+
+  .btn-decline{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--decline-line);
+  }
+  .btn-decline:hover:not(:disabled){ background:#F6F6F7; }
+
+  .receipt{
+    display:none;
+    margin-top:18px;
+    padding:16px 16px;
+    border-radius:8px;
+    background:#F1F5F3;
+    font-size:13.5px;
+    line-height:1.75;
+    color:var(--ink);
+  }
+  .receipt.show{ display:block; }
+  .receipt.decline{ background:#F4F4F5; }
+
+  .receipt .label{
+    font-weight:700;
+    margin-bottom:4px;
+  }
+  .receipt .ts{ color:var(--sub); font-size:12px; }
+
+  .footnote{
+    margin-top:22px;
+    font-size:11px;
+    color:#A6ABB0;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+  <main class="card" role="main">
+    <div class="brand">キャリアチケット</div>
+
+    <h1>以下の内定について回答してください。</h1>
+
+    <div class="details">
+      <dl>
+        <dt>会社名</dt><dd>アドビ株式会社</dd>
+        <dt>内定日</dt><dd>2026年9月15日</dd>
+        <dt>内定承諾期限</dt><dd>2026年9月22日（火）23:59</dd>
+      </dl>
+    </div>
+
+    <div class="actions">
+      <button class="act btn-accept" id="acceptBtn" type="button">内定を承諾する</button>
+      <button class="act btn-decline" id="declineBtn" type="button">内定を辞退する</button>
+    </div>
+
+    <div class="receipt" id="receipt"></div>
+
+    <p class="footnote">※ 本ページはデモ表示専用です。実際の手続きは行われません。</p>
+  </main>
+
+<script>
+  (function(){
+    var acceptBtn = document.getElementById('acceptBtn');
+    var declineBtn = document.getElementById('declineBtn');
+    var receipt = document.getElementById('receipt');
+
+    function respond(kind){
+      acceptBtn.disabled = true;
+      declineBtn.disabled = true;
+
+      var ts = new Date().toLocaleString('ja-JP', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+      receipt.className = 'receipt show ' + kind;
+
+      if(kind === 'accept'){
+        receipt.innerHTML =
+          '<div class="label">内定承諾を受け付けました</div>' +
+          'キャリアチケットより、アドビ株式会社へ承諾の旨をお伝えします。<br>' +
+          '<span class="ts">受付日時：' + ts + '</span>';
+      } else {
+        receipt.innerHTML =
+          '<div class="label">内定辞退を受け付けました</div>' +
+          'キャリアチケットより、アドビ株式会社へ辞退の旨をお伝えします。<br>' +
+          '<span class="ts">受付日時：' + ts + '</span>';
+      }
+    }
+
+    acceptBtn.addEventListener('click', function(){ respond('accept'); });
+    declineBtn.addEventListener('click', function(){ respond('decline'); });
+  })();
+</script>
+
+</body>
+</html>
